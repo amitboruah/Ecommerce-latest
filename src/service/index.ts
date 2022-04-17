@@ -13,7 +13,7 @@ export const ServiceInstance: AxiosInstance = axios.create({
 
 // Axios Auth Instance
 export const ServiceAuthInstance: any = axios.create({
-  baseURL: process.env.REACT_BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
   headers: {
     "content-type": "application/json",
     accept: "application/json",
@@ -32,19 +32,21 @@ export const apiUrl = {
   RESET_PASS:"user/Forgetpasswordaftergetmail",
 
   ADD_TO_CART:"/cart",
-  SHOW_CART:"/cart/getcart"
+  SHOW_CART:"/cart/getcart",
+
+  ORDER_DETAILS:"/order/getorder"
 };
 
 //Handle Auth request
 
-ServiceAuthInstance.interceptors.request.use((config) => {
-  if (!localStorage.getItem("access_token")) {
-  }
-
-  config.headers["Authorization"] = localStorage.getItem("access_token")
-    ? `Bearer ${localStorage.getItem("access_token")}`
+ServiceAuthInstance.interceptors.request.use((config:any) => {
+  if (localStorage.getItem("token")) {
+    
+    config.headers["Authorization"] = localStorage.getItem("token")
+    ? `Bearer ${localStorage.getItem("token")}`
     : "";
-  return config;
+    return config;
+  }
 });
 
 //Handle noAuth request

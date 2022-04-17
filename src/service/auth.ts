@@ -86,3 +86,13 @@ export const showCart = (payload:any) => {
     },
   });
 };
+
+export const orderDetails = (payload:any) => {
+  return ServiceInstance({
+    method: "POST",
+    url: apiUrl.ORDER_DETAILS,
+    data: {
+      ...payload,
+    },
+  });
+};

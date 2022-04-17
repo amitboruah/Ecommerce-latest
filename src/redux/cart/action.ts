@@ -5,6 +5,10 @@ export const cartActions = {
   SHOW_CART: "SHOW_CART",
   SHOW_CART_SUCCESS: "SHOW_CART_SUCCESS",
 
+  GET_ORDER:"GET_ORDER",
+  GET_ORDER_SUCCESS:"GET_ORDER_SUCCESS",
+
+
   addToCart: (payload: any) => ({
     type: cartActions.ADD_TO_CART,
     payload: payload,
@@ -12,6 +16,10 @@ export const cartActions = {
 
   ShowCart: (payload: any) => ({
     type: cartActions.SHOW_CART,
+    payload: payload,
+  }),
+  getorder: (payload: any) => ({
+    type: cartActions.GET_ORDER,
     payload: payload,
   }),
 };

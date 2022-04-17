@@ -12,6 +12,8 @@ export default function SingleProduct() {
 
   const dispatch = useDispatch();
   const prodData = useSelector((state: any) => state.prodlist.singleProd);
+  const qty = useSelector((state: any) => state.cartReducers.quantity);
+
 
   const { id }: any = useParams();
   const prodId = {
@@ -36,9 +38,11 @@ export default function SingleProduct() {
     dispatch(cartActions.addToCart(prodForCart));
   };
 
+  console.log(qty);
+  
   useEffect(() => {
     dispatch(actions.fetchSingleProduct(prodId));
-  }, []);
+  }, [qty]);
 
   return (
     <>
@@ -57,7 +61,7 @@ export default function SingleProduct() {
             {authenticated && (
               <div className="addContainer">
                 <button onClick={handleAddToCart}>Add to Cart</button>
-                <span className="quantityBar">{prodData.qty}</span>
+                <span className="quantityBar">{qty}</span>
                 <button onClick={handleRemoveFromCart}>
                   Remove from Cart
                 </button>

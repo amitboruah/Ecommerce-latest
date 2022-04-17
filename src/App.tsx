@@ -69,8 +69,8 @@ function App() {
           <Route path="/forgotPassword" element={<ForgotPassword />}></Route>
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
 
-          {/* <Route path="/checkout" element={<Checkout />}></Route>
-          <Route path="/address" element={<Address />}></Route> */}
+          <Route path="/checkout" element={<Checkout />}></Route>
+          <Route path="/address" element={<Address />}></Route>
 
           <Route path="*" element={<Error />}></Route>
         </Routes>

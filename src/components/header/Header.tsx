@@ -1,23 +1,24 @@
 import "./header.scss";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useContext, useEffect} from "react";
-import actions from "../../redux/product/action";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CountContext } from "../../context/CountContext";
-import { authenticated , user} from "../../utility";
+import { authenticated, user } from "../../utility";
+import { Drawer } from "antd";
+import cartActions from "../../redux/cart/action";
 
 export default function Header() {
+  const [visible, setVisible] = useState(false);
 
   const dispatch = useDispatch();
-  const cartData = useSelector((state: any) => state.prodlist.productData);
+  const cartData = useSelector((state: any) => state.cartReducers.Cart);
   const navigate = useNavigate();
-  const { count, product, setProduct, price, setPrice} =
-    useContext(CountContext);
+
+  console.log("the cart data", cartData);
 
   const addToTheCart = () => {
-    setProduct(updatedCart());
-    total();
+    // setProduct(updatedCart());
+    // total();
   };
   // const itemAdded = (id: number) => {
   //   dispatch(actions.addToCart(id));
@@ -29,25 +30,29 @@ export default function Header() {
   //   addToTheCart();
   // };
 
-  const updatedCart = () => {
-    const newCart = cartData.filter((e: any) => e.qty > 0);
-    return newCart;
-  };
+  // const updatedCart = () => {
+  //   const newCart = cartData.filter((e: any) => e.qty > 0);
+  //   return newCart;
+  // };
 
-  let sum = 0;
-  const total = () => {
-    product
-      .map((data: any) => data.qty * data.price)
-      .map((e: any) => {
-        sum = sum + e;
-        setPrice(sum);
-      });
-  };
+  // let sum = 0;
+  // const total = () => {
+  //   product
+  //     .map((data: any) => data.qty * data.price)
+  //     .map((e: any) => {
+  //       sum = sum + e;
+  //       setPrice(sum);
+  //     });
+  // };
+
+  // logout button
 
   const handleLogout = () => {
     localStorage.clear();
     navigate("/");
   };
+
+  // navigate with logo
 
   const handleLogo = () => {
     if (authenticated) {
@@ -57,13 +62,26 @@ export default function Header() {
     }
   };
 
- const name = user?.split("@")
+  const name = user?.split("@");
 
- 
+  const userEmail = {
+    Email: user,
+  };
+
+  // cart drawer
+
+  const showDrawer = (e: any): any => {
+    e.preventDefault();
+    setVisible(true);
+    dispatch(cartActions.ShowCart(userEmail));
+  };
+  const onClose = () => {
+    setVisible(false);
+  };
 
   useEffect(() => {
     addToTheCart();
-  }, [count, authenticated]);
+  }, [authenticated]);
 
   return (
     <>
@@ -76,21 +94,16 @@ export default function Header() {
               data-minus-value-mobile="55"
               data-speed="1000"
             >
-              
-
               <div className="container">
                 <div className="attr-nav">
                   <ul>
-
                     {authenticated ? (
                       <>
                         <li>
                           <a href="#">
                             <p className="username">
                               Hi, &nbsp;
-                              <span>
-                                {name[0]}
-                              </span>
+                              <span>{name[0]}</span>
                             </p>
                           </a>
                         </li>
@@ -105,44 +118,56 @@ export default function Header() {
                     {authenticated ? (
                       <li className="dropdown">
                         <a
-                          href="#"
-                          className="dropdown-toggle"
-                          data-toggle="dropdown"
+                          href=""
+                          onClick={(e) => {
+                            showDrawer(e);
+                          }}
                         >
                           <span
                             className="lnr lnr-cart"
                             onMouseOver={() => addToTheCart()}
                           ></span>
                           <span className="badge badge-bg-1">
-                            {product.length}
+                            {/* {product.length} */}
                           </span>
                         </a>
-                        {/* {console.log(cartData, " teststsets")} */}
-
-                        <>
-                          <ul
-                            className="dropdown-menu cart-list s-cate"
-                            onMouseOver={() => addToTheCart()}
-                          >
-                            {product.map((data: any, ky: number) => {
+                        <Drawer
+                          title="Cart Details"
+                          placement="right"
+                          size="large"
+                          onClose={onClose}
+                          visible={visible}
+                        >
+                          <>
+                            {cartData.map((data: any, ky: number) => {
                               return (
                                 <React.Fragment key={ky}>
                                   <li className="single-cart-list">
-                                    <a className="photo">
+                                    <a
+                                      className="photo"
+                                      style={{
+                                        width: "300px",
+                                        height: "300px",
+                                        padding: "30px",
+                                      }}
+                                    >
                                       <img
-                                        src={data.img}
+                                        src={data.item.image}
                                         className="cart-thumb"
                                         alt="image"
                                       />
                                     </a>
-                                    <div className="cart-list-txt">
+                                    <div
+                                      className="cart-list-txt"
+                                      style={{ paddingTop: "60px" }}
+                                    >
                                       <h6>
-                                        <a>{data.name}</a>
+                                        <a>{data.item.Product_name}</a>
                                       </h6>
                                       <p>
-                                        {data.qty} qty{" "}
+                                        {data.quantity} qty{" "}
                                         <span className="price">
-                                          $ {data.price}
+                                          $ {data.item.Price}
                                         </span>
                                       </p>
                                     </div>
@@ -177,20 +202,21 @@ export default function Header() {
                                       </span>
                                     </div>
                                   </li>
+                                  <hr />
                                 </React.Fragment>
                               );
                             })}
                             <li className="total">
-                              <span>Total: $ {price}</span>
+                              {/* <span>Total: $ {price}</span> */}
                               <button
                                 className="btn-cart pull-right"
                                 onClick={() => navigate("/checkout")}
                               >
-                                Checkout
+                                Proceed
                               </button>
                             </li>
-                          </ul>
-                        </>
+                          </>
+                        </Drawer>
                       </li>
                     ) : null}
                   </ul>
@@ -229,10 +255,7 @@ export default function Header() {
                           </a>
                         </li>
                         <li className="scroll">
-                          <a
-                            href=""
-                            onClick={() => navigate("/collection")}
-                          >
+                          <a href="" onClick={() => navigate("/collection")}>
                             collections
                           </a>
                         </li>

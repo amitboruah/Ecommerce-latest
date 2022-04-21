@@ -4,10 +4,17 @@ import cartActions from "./action";
 
 export function* Addproduct() {
   yield takeEvery(cartActions.ADD_TO_CART, function* (payload: any): any {
-  const response = yield call(addToCart, payload.payload);
+    const response = yield call(addToCart, payload.payload);
+    const showCartPayload = {
+      Email: payload.payload.Email,
+    };
 
     if (response) {
-      yield put({ type: cartActions.ADD_TO_CART_SUCCESS, payload: response });
+      yield all([
+        put({ type: cartActions.ADD_TO_CART_SUCCESS, payload: response }),
+        put({ type:cartActions.SHOW_CART, payload:showCartPayload})
+      ]);
+      // yield put({ type: cartActions.ADD_TO_CART_SUCCESS, payload: response });
     }
   });
 }
@@ -31,7 +38,6 @@ export function* order() {
     }
   });
 }
-
 
 export default function* cartSaga() {
   yield all([fork(Addproduct), fork(Showproduct)]);

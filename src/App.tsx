@@ -13,7 +13,6 @@ import Error from "./components/errorPage/Error";
 import Checkout from "./components/checkout/Checkout";
 import Address from "./components/address/Address";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
@@ -28,7 +27,7 @@ import SingleProduct from "./components/singleProduct/SingleProduct";
 function App() {
   return (
     <>
-      <Router>
+    
         <Header />
         <Routes>
           <Route path="/" element={<Alreadylogin />}>
@@ -75,7 +74,7 @@ function App() {
           <Route path="*" element={<Error />}></Route>
         </Routes>
         <Footers />
-      </Router>
+    
     </>
   );
 }

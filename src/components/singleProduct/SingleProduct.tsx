@@ -9,37 +9,43 @@ import "./singleProduct.scss";
 
 export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
+  const [visible, setVisible] = useState(false);
 
   const dispatch = useDispatch();
   const prodData = useSelector((state: any) => state.prodlist.singleProd);
   const qty = useSelector((state: any) => state.cartReducers.quantity);
 
-
   const { id }: any = useParams();
+  // console.log(typeof(id),"from product");
+  
   const prodId = {
-    id: id,
+    id: parseInt(id),
   };
 
   const prodForCart = {
     Email: user,
     quantity: quantity,
-    productId: id,
+    productId:  parseInt(id),
   };
 
   const handleAddToCart = () => {
     setQuantity(quantity + 1);
+    setVisible(true);
 
     dispatch(cartActions.addToCart(prodForCart));
   };
 
   const handleRemoveFromCart = () => {
-    setQuantity(quantity - 1);
+    if (quantity > 0) {
+      setQuantity(quantity - 1);
+    }
+    setVisible(true);
 
     dispatch(cartActions.addToCart(prodForCart));
   };
 
   console.log(qty);
-  
+
   useEffect(() => {
     dispatch(actions.fetchSingleProduct(prodId));
   }, [qty]);
@@ -61,10 +67,12 @@ export default function SingleProduct() {
             {authenticated && (
               <div className="addContainer">
                 <button onClick={handleAddToCart}>Add to Cart</button>
-                <span className="quantityBar">{qty}</span>
-                <button onClick={handleRemoveFromCart}>
-                  Remove from Cart
-                </button>
+                {visible ? (
+                  <span className="quantityBar">
+                    {quantity > 0 ? quantity - 1 : quantity}
+                  </span>
+                ) : null}
+                <button onClick={handleRemoveFromCart}>Remove from Cart</button>
               </div>
             )}
           </div>

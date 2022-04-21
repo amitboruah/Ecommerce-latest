@@ -4,48 +4,18 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authenticated, user } from "../../utility";
-import { Drawer } from "antd";
+import { Drawer, Empty } from "antd";
 import cartActions from "../../redux/cart/action";
 
 export default function Header() {
   const [visible, setVisible] = useState(false);
+  const [quantity, setQuantity] = useState(null);
 
   const dispatch = useDispatch();
   const cartData = useSelector((state: any) => state.cartReducers.Cart);
   const navigate = useNavigate();
 
-  console.log("the cart data", cartData);
-
-  const addToTheCart = () => {
-    // setProduct(updatedCart());
-    // total();
-  };
-  // const itemAdded = (id: number) => {
-  //   dispatch(actions.addToCart(id));
-  //   addToTheCart();
-  // };
-
-  // const handleRemove = (data: number) => {
-  //   dispatch(actions.removeFromCart(data));
-  //   addToTheCart();
-  // };
-
-  // const updatedCart = () => {
-  //   const newCart = cartData.filter((e: any) => e.qty > 0);
-  //   return newCart;
-  // };
-
-  // let sum = 0;
-  // const total = () => {
-  //   product
-  //     .map((data: any) => data.qty * data.price)
-  //     .map((e: any) => {
-  //       sum = sum + e;
-  //       setPrice(sum);
-  //     });
-  // };
-
-  // logout button
+  // console.log(cartData , "from header");
 
   const handleLogout = () => {
     localStorage.clear();
@@ -54,7 +24,8 @@ export default function Header() {
 
   // navigate with logo
 
-  const handleLogo = () => {
+  const handleLogo = (e: any) => {
+    e.preventDefault();
     if (authenticated) {
       navigate("/home");
     } else {
@@ -68,6 +39,36 @@ export default function Header() {
     Email: user,
   };
 
+  // to add item through drawer
+
+  const itemAdded = (id: number, qty: number) => {
+    let prodForCart = {
+      Email: user,
+      productId: id,
+      quantity: qty + 1,
+    };
+
+    dispatch(cartActions.addToCart(prodForCart));
+    // dispatch(cartActions.ShowCart(userEmail));
+
+
+  };
+
+  // to remove item from drawer
+
+  const handleRemove = (id: number, qty: number) => {
+    let prodForCart = {
+      Email: user,
+      productId: id,
+      quantity: qty - 1,
+    };
+
+    dispatch(cartActions.addToCart(prodForCart));
+    // dispatch(cartActions.ShowCart(userEmail));
+
+
+  };
+
   // cart drawer
 
   const showDrawer = (e: any): any => {
@@ -79,9 +80,7 @@ export default function Header() {
     setVisible(false);
   };
 
-  useEffect(() => {
-    addToTheCart();
-  }, [authenticated]);
+  useEffect(() => {}, [authenticated, itemAdded, handleRemove, dispatch]);
 
   return (
     <>
@@ -123,10 +122,7 @@ export default function Header() {
                             showDrawer(e);
                           }}
                         >
-                          <span
-                            className="lnr lnr-cart"
-                            onMouseOver={() => addToTheCart()}
-                          ></span>
+                          <span className="lnr lnr-cart"></span>
                           <span className="badge badge-bg-1">
                             {/* {product.length} */}
                           </span>
@@ -138,75 +134,86 @@ export default function Header() {
                           onClose={onClose}
                           visible={visible}
                         >
-                          <>
-                            {cartData.map((data: any, ky: number) => {
-                              return (
-                                <React.Fragment key={ky}>
-                                  <li className="single-cart-list">
-                                    <a
-                                      className="photo"
-                                      style={{
-                                        width: "300px",
-                                        height: "300px",
-                                        padding: "30px",
-                                      }}
-                                    >
-                                      <img
-                                        src={data.item.image}
-                                        className="cart-thumb"
-                                        alt="image"
-                                      />
-                                    </a>
-                                    <div
-                                      className="cart-list-txt"
-                                      style={{ paddingTop: "60px" }}
-                                    >
-                                      <h6>
-                                        <a>{data.item.Product_name}</a>
-                                      </h6>
-                                      <p>
-                                        {data.quantity} qty{" "}
-                                        <span className="price">
-                                          $ {data.item.Price}
+                          {cartData.length !== 0 ? (
+                            <>
+                              {cartData.map((data: any, ky: number) => {
+                                return (
+                                  <React.Fragment key={ky}>
+                                    <li className="single-cart-list">
+                                      <a
+                                        className="photo"
+                                        style={{
+                                          width: "300px",
+                                          height: "300px",
+                                          padding: "30px",
+                                        }}
+                                      >
+                                        <img
+                                          src={data.item.image}
+                                          className="cart-thumb"
+                                          alt="image"
+                                        />
+                                      </a>
+                                      <div
+                                        className="cart-list-txt"
+                                        style={{ paddingTop: "60px" }}
+                                      >
+                                        <h6>
+                                          <a>{data.item.Product_name}</a>
+                                        </h6>
+                                        <p>
+                                          {data.quantity} qty{" "}
+                                          <span className="price">
+                                            $ {data.item.Price}
+                                          </span>
+                                        </p>
+                                      </div>
+                                      <div
+                                        className="cart-close"
+                                        style={{ marginTop: "40px" }}
+                                      >
+                                        <span
+                                          className="lnr "
+                                          onClick={() =>
+                                            itemAdded(
+                                              data.item.id,
+                                              data.quantity
+                                            )
+                                          }
+                                          style={{
+                                            fontSize: "40px",
+                                            color: "grey",
+                                          }}
+                                        >
+                                          +
                                         </span>
-                                      </p>
-                                    </div>
-                                    <div
-                                      className="cart-close"
-                                      style={{ marginTop: "10px" }}
-                                    >
-                                      <span
-                                        className="lnr "
-                                        // onClick={() => itemAdded(data.id)}
-                                        style={{
-                                          fontSize: "24px",
-                                          color: "grey",
-                                        }}
+                                      </div>
+                                      <div
+                                        className="cart-close"
+                                        style={{ marginTop: "100px" }}
                                       >
-                                        +
-                                      </span>
-                                    </div>
-                                    <div
-                                      className="cart-close"
-                                      style={{ marginTop: "30px" }}
-                                    >
-                                      <span
-                                        className="lnr"
-                                        // onClick={() => handleRemove(data.id)}
-                                        style={{
-                                          fontSize: "40px",
-                                          color: "lightGrey",
-                                        }}
-                                      >
-                                        -
-                                      </span>
-                                    </div>
-                                  </li>
-                                  <hr />
-                                </React.Fragment>
-                              );
-                            })}
-                            <li className="total">
+                                        <span
+                                          className="lnr"
+                                          onClick={() =>
+                                            handleRemove(
+                                              data.item.id,
+                                              data.quantity
+                                            )
+                                          }
+                                          style={{
+                                            fontSize: "70px",
+                                            color: "grey",
+                                          }}
+                                        >
+                                          -
+                                        </span>
+                                      </div>
+                                    </li>
+                                    <hr />
+                                  </React.Fragment>
+                                );
+                              })}
+
                               {/* <span>Total: $ {price}</span> */}
                               <button
                                 className="btn-cart pull-right"
@@ -214,8 +221,16 @@ export default function Header() {
                               >
                                 Proceed
                               </button>
-                            </li>
-                          </>
+                            </>
+                          ) : (
+                            // <img
+                            //   src="https://upload.wikimedia.org/wikipedia/commons/5/54/Ajux_loader.gif"
+                            //   alt="loading"
+                            //   className="loader"
+                            //   style={{ width: "300px" }}
+                            // />
+                            <Empty />
+                          )}
                         </Drawer>
                       </li>
                     ) : null}
@@ -230,7 +245,13 @@ export default function Header() {
                   >
                     <i className="fa fa-bars"></i>
                   </button>
-                  <a className="navbar-brand" href="" onClick={handleLogo}>
+                  <a
+                    className="navbar-brand"
+                    href=""
+                    onClick={(e) => {
+                      handleLogo(e);
+                    }}
+                  >
                     <img
                       src="https://cdn-icons-png.flaticon.com/512/34/34611.png"
                       alt=""

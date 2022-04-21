@@ -41,7 +41,6 @@ export const apiUrl = {
 
 ServiceAuthInstance.interceptors.request.use((config:any) => {
   if (localStorage.getItem("token")) {
-    
     config.headers["Authorization"] = localStorage.getItem("token")
     ? `Bearer ${localStorage.getItem("token")}`
     : "";
@@ -58,7 +57,7 @@ ServiceInstance.interceptors.request.use((config) => {
 //Handle Auth response
 
 ServiceAuthInstance.interceptors.response.use(
-  (response:any) => response,
+  (response:any) => response.data,
   (error:any) => {
     ServiceAuthInstance.interceptors.response.reject(ServiceAuthInstance);
     return error?.response

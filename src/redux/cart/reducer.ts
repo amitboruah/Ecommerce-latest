@@ -10,7 +10,7 @@ const initialValue = {
 const cartReducers = (state = initialValue, action: any) => {
   switch (action.type) {
     case cartActions.ADD_TO_CART_SUCCESS:
-      console.log(action.payload.quantity, "from reducer");
+      // console.log(action.payload.quantity, "from reducer");
 
       return {
         ...state,
@@ -28,11 +28,11 @@ const cartReducers = (state = initialValue, action: any) => {
         Cart: action.payload,
       };
 
-    case cartActions.SHOW_CART_SUCCESS:
-      return {
-        ...state,
-        order: action.payload,
-      };
+    // case cartActions.SHOW_CART_SUCCESS:
+    //   return {
+    //     ...state,
+    //     order: action.payload,
+    //   };
 
     default:
       return state;

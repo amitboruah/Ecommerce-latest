@@ -6,16 +6,19 @@ import reportWebVitals from "./reportWebVitals";
 import store from "./redux/store/store";
 import { Provider } from "react-redux";
 import Context from "./context/CountContext";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
   <>
-    <Context>
-      <Provider store={store}>
-        <App />
+    <BrowserRouter basename="/">
+      <Context>
+        <Provider store={store}>
+          <App />
 
-        <React.StrictMode></React.StrictMode>
-      </Provider>
-    </Context>
+          <React.StrictMode></React.StrictMode>
+        </Provider>
+      </Context>
+    </BrowserRouter>
   </>,
   document.getElementById("root")
 );

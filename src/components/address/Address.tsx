@@ -6,7 +6,7 @@ export default function Address() {
   return (
     <>
       <div className="addressForm">
-        <div className="form">
+        <div className="addform">
           <Form
             autoComplete="off"
             labelCol={{ span: 10 }}
@@ -42,7 +42,7 @@ export default function Address() {
                   message: "Please enter Mobile Number",
                 },
                 { whitespace: true },
-                { min: 10, message: "must be 10 digit" },
+                { min: 10, max:10, message: "must be 10 digit" },
               ]}
               hasFeedback
             >
@@ -116,7 +116,7 @@ export default function Address() {
                 {
                   required: true,
                   message: "Please fill all the details",
-                },
+                },{min:6, max:6 , message:"Enter valid pincode"},
                 { whitespace: true },
               ]}
               hasFeedback

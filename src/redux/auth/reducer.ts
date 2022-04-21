@@ -66,7 +66,7 @@ export default function authReducer(state = initialState, action: any) {
         forgotError: action.forgotError,
       };
 
-    case actions.FORGOT_PASSWORD:
+    case actions.RESET_PASSWORD:
       return {
         ...initialState,
       };

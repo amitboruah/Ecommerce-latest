@@ -47,7 +47,7 @@ export const resetPassword = (payload:any) => {
 };
 
 export const allproducts = (payload:any) => {
-  return ServiceInstance({
+  return ServiceAuthInstance({
     method: "POST",
     url: apiUrl.ALL_PRODUCTS,
     data: {
@@ -58,7 +58,7 @@ export const allproducts = (payload:any) => {
 
 
 export const singleProduct = (payload:any) => {
-  return ServiceInstance({
+  return ServiceAuthInstance({
     method: "POST",
     url: apiUrl.SINGLE_PRODUCT,
     data: {
@@ -68,7 +68,7 @@ export const singleProduct = (payload:any) => {
 };
 
 export const addToCart = (payload:any) => {
-  return ServiceInstance({
+  return ServiceAuthInstance({
     method: "POST",
     url: apiUrl.ADD_TO_CART,
     data: {
@@ -78,7 +78,7 @@ export const addToCart = (payload:any) => {
 };
 
 export const showCart = (payload:any) => {
-  return ServiceInstance({
+  return ServiceAuthInstance({
     method: "POST",
     url: apiUrl.SHOW_CART,
     data: {
@@ -88,7 +88,7 @@ export const showCart = (payload:any) => {
 };
 
 export const orderDetails = (payload:any) => {
-  return ServiceInstance({
+  return ServiceAuthInstance({
     method: "POST",
     url: apiUrl.ORDER_DETAILS,
     data: {
